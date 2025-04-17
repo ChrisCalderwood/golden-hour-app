@@ -1,6 +1,4 @@
 body {
-  margin: 0;
-  padding: 0;
   font-family: 'Inter', 'Helvetica Neue', sans-serif;
   background-color: #f7f9fc;
 }
@@ -117,4 +115,39 @@ button:hover {
   font-size: 0.9rem;
   color: #555;
   text-align: center;
+}
+
+.location-input-wrapper {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.use-location-button {
+  padding: 0.4rem 0.8rem;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.use-location-button:hover {
+  background-color: #2563eb;
+}
+
+.use-location-button:active {
+  background-color: #1d4ed8;
+}
+
+.loader {
+  border-top-color: #f59e0b; /* a warm golden color */
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
