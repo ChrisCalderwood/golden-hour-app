@@ -5,7 +5,6 @@ function App() {
   const [location, setLocation] = useState("");
   const [date, setDate] = useState("");
   const [autoLocation, setAutoLocation] = useState("");
-  const [inputType, setInputType] = useState("city"); // "city" or "coordinates"
   const [showResult, setShowResult] = useState(false);
   const [loading, setLoading] = useState(false);
   const [goldenHour, setGoldenHour] = useState(null);
@@ -35,42 +34,34 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
   
     let lat, lon;
   
-    // If user typed coordinates (e.g., "40.7128,-74.0060")
-    if (inputType === "coordinates") {
-      const parts = location.split(",").map(p => parseFloat(p.trim()));
-      if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
-        lat = parts[0];
-        lon = parts[1];
-      } else {
-        alert("Invalid coordinates format. Please use 'lat, lon'.");
-        return;
-      }
-    } else {
-      // inputType is 'city'
-      try {
-        const geoRes = await fetch(`http://localhost:5050/api/geocode?city=${encodeURIComponent(location)}`);
-        const geoData = await geoRes.json();
-        if (!geoRes.ok || !geoData.latitude || !geoData.longitude) {
-          throw new Error("Invalid geocode response");
-        }
-        lat = geoData.latitude;
-        lon = geoData.longitude;
-      } catch (err) {
-        alert("Error geocoding location. Please enter a valid city name.");
-        console.error(err);
-        return;
-      }
-    }    
-    
+    if (!location) {
+      alert("Please enter a location.")
+      return;
+    }
     if (!date) {
       alert("Please select a date.");
       return;
     }
 
-    setLoading(true);
+    try {
+      const trimmedLocation = location.trim();
+      const geoRes = await fetch(`http://localhost:5050/api/geocode?city=${encodeURIComponent(trimmedLocation)}`);
+      const geoData = await geoRes.json();
+      if (!geoRes.ok || !geoData.latitude || !geoData.longitude) {
+        throw new Error("Invalid geocode response");
+      }
+      lat = geoData.latitude;
+      lon = geoData.longitude;
+    } catch (err) {
+      alert("We couldn’t find that location. Try entering a city name like 'Paris' or coordinates like '48.8566,2.3522'.");
+      console.error(err);
+      return;
+    }    
+
     try {
       const response = await fetch('http://localhost:5050/api/golden-hour', {
         method: 'POST',
@@ -99,6 +90,11 @@ function App() {
     });
   };
 
+  useEffect(() => {
+    setShowResult(false);
+    setGoldenHour(null);
+  }, [location, date]);
+
   return (
     <div style={backgroundStyle}>
       <div className="container">
@@ -107,24 +103,15 @@ function App() {
             <span className="icon">☀️</span> Golden Hour Calculator
           </h1>
 
-          <form onSubmit={handleSubmit}>
-            <label>Input Type</label>
-            <select
-              value={inputType}
-              onChange={(e) => setInputType(e.target.value)}
-              className="mb-2 p-1 border rounded"
-            >
-              <option value="city">City</option>
-              <option value="coordinates">Coordinates</option>
-            </select>
-            
+          <form onSubmit={handleSubmit} disabled={loading}>
+
             <label>Location (City or Coordinates)</label>
             <div className="location-input-wrapper">
               <input
                 type="text"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                placeholder="e.g. New York or 40.7128,-74.0060"
+                placeholder="e.g. New York, NY or 40.7128,-74.0060"
               />
               {autoLocation && (
                 <button
@@ -144,7 +131,7 @@ function App() {
               onChange={(e) => setDate(e.target.value)}
             />
 
-            <button type="submit">Calculate</button>
+            <button type="submit" disabled={loading}>Calculate</button>
             {loading && (
               <div className="flex justify-center mt-4">
                 <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-8 w-8"></div>
