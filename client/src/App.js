@@ -5,6 +5,7 @@ function App() {
   const [location, setLocation] = useState("");
   const [date, setDate] = useState("");
   const [autoLocation, setAutoLocation] = useState("");
+  const [inputType, setInputType] = useState("city"); // "city" or "coordinates"
   const [showResult, setShowResult] = useState(false);
   const [loading, setLoading] = useState(false);
   const [goldenHour, setGoldenHour] = useState(null);
@@ -38,19 +39,32 @@ function App() {
     let lat, lon;
   
     // If user typed coordinates (e.g., "40.7128,-74.0060")
-    if (location.includes(",")) {
+    if (inputType === "coordinates") {
       const parts = location.split(",").map(p => parseFloat(p.trim()));
       if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
         lat = parts[0];
         lon = parts[1];
       } else {
-        alert("Invalid coordinates format.");
+        alert("Invalid coordinates format. Please use 'lat, lon'.");
         return;
       }
     } else {
-      alert("Please enter coordinates like '40.7128,-74.0060' or click 'Use My Location'.");
-      return;
+      // inputType is 'city'
+      try {
+        const geoRes = await fetch(`http://localhost:5050/api/geocode?city=${encodeURIComponent(location)}`);
+        const geoData = await geoRes.json();
+        if (!geoRes.ok || !geoData.latitude || !geoData.longitude) {
+          throw new Error("Invalid geocode response");
+        }
+        lat = geoData.latitude;
+        lon = geoData.longitude;
+      } catch (err) {
+        alert("Error geocoding location. Please enter a valid city name.");
+        console.error(err);
+        return;
+      }
     }    
+    
     if (!date) {
       alert("Please select a date.");
       return;
@@ -94,6 +108,16 @@ function App() {
           </h1>
 
           <form onSubmit={handleSubmit}>
+            <label>Input Type</label>
+            <select
+              value={inputType}
+              onChange={(e) => setInputType(e.target.value)}
+              className="mb-2 p-1 border rounded"
+            >
+              <option value="city">City</option>
+              <option value="coordinates">Coordinates</option>
+            </select>
+            
             <label>Location (City or Coordinates)</label>
             <div className="location-input-wrapper">
               <input
