@@ -110,6 +110,25 @@ button:hover {
   }
 }
 
+select {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  background-color: white;
+  color: #333;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+select:focus {
+  outline: none;
+  border-color: #f59e0b; /* amber-500 / golden hue */
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+}
+
 .auto-location {
   margin-top: 1rem;
   font-size: 0.9rem;
