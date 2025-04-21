@@ -62,8 +62,9 @@ cd client && npm install
 cd ../server && npm install
 ```
 
-3. **Set your OpenCage API key in server/.env:**
-.env
+3. **Set your OpenCage API key in server/.env:**  
+
+.env  
 OPENCAGE_API_KEY=your_api_key_here
 
 5. **Start the app:**
