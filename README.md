@@ -63,11 +63,10 @@ cd ../server && npm install
 ```
 
 3. **Set your OpenCage API key in server/.env:**  
-
-.env  
+ 
 OPENCAGE_API_KEY=your_api_key_here
 
-5. **Start the app:**
+4. **Start the app:**
 In your terminal, run:
 ```bash
 npm start
