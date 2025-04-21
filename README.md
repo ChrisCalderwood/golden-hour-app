@@ -31,18 +31,18 @@ This web application calculates the morning and evening golden hour times for a 
 ## Project Structure
 Note: Not all files are shown below
 
-golden-hour-app/ 
-├── client/ # React frontend
-│ ├── public # Static files (e.g., background image)
-│ ├── src/
-│ │ ├── App.css # CSS for app components
-│ │ └── App.js # JS and JSX to define app logic and rendering
-├── server/ # Express backend 
-│ ├── routes/ 
-│ │ ├── geocode.js # OpenCage geocoding route 
-│ │ └── goldenHour.js # SunCalc golden hour route
-│ ├── .env # API key stored here 
-│ └── index.js # Main entry point for server
+golden-hour-app/  
+├── client/ # React frontend  
+│ ├── public # Static files (e.g., background image)  
+│ ├── src/  
+│ │ ├── App.css # CSS for app components  
+│ │ └── App.js # JS and JSX to define app logic and rendering  
+├── server/ # Express backend   
+│ ├── routes/   
+│ │ ├── geocode.js # OpenCage geocoding route   
+│ │ └── goldenHour.js # SunCalc golden hour route  
+│ ├── .env # API key stored here   
+│ └── index.js # Main entry point for server  
 └── README.md
 
 ---
@@ -55,24 +55,24 @@ git clone https://github.com/your-username/golden-hour-app.git
 cd golden-hour-app
 ```
 
-3. **Install dependencies:**
+2. **Install dependencies:**
 ```bash
 npm install
 cd client && npm install
 cd ../server && npm install
 ```
 
-5. **Set your OpenCage API key in server/.env:**
+3. **Set your OpenCage API key in server/.env:**
 .env
 OPENCAGE_API_KEY=your_api_key_here
 
-6. **Start the app:**
+5. **Start the app:**
 In your terminal, run:
 ```bash
 npm start
 ```
 
-The client runs on http://localhost:3000
+The client runs on http://localhost:3000  
 The server runs on http://localhost:5050
 
 ## Future Improvements
@@ -84,5 +84,5 @@ The server runs on http://localhost:5050
 This project is for academic purposes and uses an MIT License.
 
 ## Acknowledgements
-**SunCalc** for astronomical calculations
+**SunCalc** for astronomical calculations  
 **OpenCage Geocoder** for forward geocoding
